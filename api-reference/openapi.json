@@ -1,195 +1,207 @@
 {
-  "openapi": "3.0.1",
-  "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
+    "openapi": "3.1.0",
+    "x-stoplight": {
+      "id": "gj5pinoezgezb"
     },
-    "version": "1.0.0"
-  },
-  "servers": [
-    {
-      "url": "http://sandbox.mintlify.com"
-    }
-  ],
-  "security": [
-    {
-      "bearerAuth": []
-    }
-  ],
-  "paths": {
-    "/plants": {
-      "get": {
-        "description": "Returns all plants from the system that the user has access to",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
-        "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
+    "info": {
+      "title": "Enum&Default&Example",
+      "version": "1.0"
+    },
+    "servers": [
+      {
+        "url": "https://httpbin.org"
+      }
+    ],
+    "paths": {
+      "/anything": {
+        "post": {
+          "parameters": [
+            {
               "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
+                "type": "string",
+                "example": "EX1",
+                "enum": [
+                  "E1",
+                  "E2"
+                ],
+                "default": "D1"
+              },
+              "in": "query",
+              "name": "name"
             }
+          ],
+          "summary": "Enum & Default & Example",
+          "x-stoplight": {
+            "id": "qvmp67u41vzmq"
           },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Plant"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
+          "responses": {
+            "default": {
+              "description": "Default"
             }
           }
-        }
-      }
-    },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
+        },
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
-            "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+              "type": "string",
+              "default": "D1",
+              "example": "EX1"
+            },
+            "in": "query",
+            "name": "name"
           }
         ],
-        "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
+        "put": {
+          "summary": "Default & Example",
+          "tags": [],
+          "responses": {
+            "default": {
+              "description": "Default"
             }
-          }
-        }
-      }
-    }
-  },
-  "components": {
-    "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
           },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
-          }
-        }
-      },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
+          "operationId": "put-anything",
+          "x-stoplight": {
+            "id": "9a12adyzampi5"
           },
-          {
-            "required": [
-              "id"
-            ],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
-              }
+          "parameters": [
+            {
+              "schema": {
+                "type": "string",
+                "default": "D1",
+                "example": "EX1"
+              },
+              "in": "query",
+              "name": "name"
             }
-          }
-        ]
-      },
-      "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "integer",
-            "format": "int32"
+          ]
+        },
+        "patch": {
+          "summary": "Default",
+          "tags": [],
+          "responses": {
+            "default": {
+              "description": "Default"
+            }
           },
-          "message": {
-            "type": "string"
-          }
+          "operationId": "patch-anything",
+          "x-stoplight": {
+            "id": "mapib7qba7rxs"
+          },
+          "parameters": [
+            {
+              "schema": {
+                "type": "string",
+                "default": "D1"
+              },
+              "in": "query",
+              "name": "name"
+            }
+          ]
+        },
+        "get": {
+          "summary": "Example",
+          "tags": [],
+          "responses": {
+            "default": {
+              "description": "Default"
+            }
+          },
+          "operationId": "get-anything",
+          "x-stoplight": {
+            "id": "1k8gr5o7hp71i"
+          },
+          "parameters": [
+            {
+              "schema": {
+                "type": "string",
+                "example": "EX1"
+              },
+              "in": "query",
+              "name": "name"
+            }
+          ]
         }
       }
     },
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer"
+    "components": {
+      "schemas": {
+        "User": {
+          "title": "User",
+          "type": "object",
+          "description": "",
+          "examples": [
+            {
+              "id": 142,
+              "firstName": "Alice",
+              "lastName": "Smith",
+              "email": "alice.smith@gmail.com",
+              "dateOfBirth": "1997-10-31",
+              "emailVerified": true,
+              "signUpDate": "2019-08-24"
+            }
+          ],
+          "properties": {
+            "id": {
+              "type": "integer",
+              "description": "Unique identifier for the given user.",
+              "x-stoplight": {
+                "id": "rzhjz3aotxw98"
+              }
+            },
+            "firstName": {
+              "type": "string",
+              "x-stoplight": {
+                "id": "h28po1locs4lw"
+              }
+            },
+            "lastName": {
+              "type": "string",
+              "x-stoplight": {
+                "id": "zklskygx2d0du"
+              }
+            },
+            "email": {
+              "type": "string",
+              "format": "email",
+              "x-stoplight": {
+                "id": "sda4vg4djaxby"
+              }
+            },
+            "dateOfBirth": {
+              "type": "string",
+              "format": "date",
+              "example": "1997-10-31",
+              "x-stoplight": {
+                "id": "wqeu8ughl660f"
+              }
+            },
+            "emailVerified": {
+              "type": "boolean",
+              "description": "Set to true if the user's email has been verified.",
+              "x-stoplight": {
+                "id": "et2e07idxxnbi"
+              }
+            },
+            "createDate": {
+              "type": "string",
+              "format": "date",
+              "description": "The date that the user was created.",
+              "x-stoplight": {
+                "id": "ps67ycvyxczxy"
+              }
+            }
+          },
+          "required": [
+            "id",
+            "firstName",
+            "lastName",
+            "email",
+            "emailVerified"
+          ],
+          "x-stoplight": {
+            "id": "e1e30nd16t0b0"
+          }
+        }
       }
     }
   }
-}
