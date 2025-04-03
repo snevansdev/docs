@@ -223,6 +223,12 @@
   "servers": [
     {
       "url": "https://httpbin.org"
+    },
+    {
+      "url": "https://echo.apifox.com"
+    },
+    {
+      "url": "https://postman-echo.com"
     }
   ],
   "security": []
