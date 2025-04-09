@@ -385,25 +385,37 @@
         "type": "oauth2",
         "flows": {
           "implicit": {
-            "authorizationUrl": "",
-            "refreshUrl": "",
-            "scopes": {}
+            "authorizationUrl": "https://httpbin.org/post",
+            "refreshUrl": "https://httpbin.org/post",
+            "scopes": {
+              "scope_1": "QWERTY",
+              "scope_2": "QWERTY"
+            }
           },
           "password": {
-            "tokenUrl": "",
-            "refreshUrl": "",
-            "scopes": {}
+            "tokenUrl": "https://httpbin.org/post",
+            "refreshUrl": "https://httpbin.org/post",
+            "scopes": {
+              "scope_2": "QWERTY",
+              "scope_3": "QWERTY"
+            }
           },
           "clientCredentials": {
-            "tokenUrl": "",
-            "refreshUrl": "",
-            "scopes": {}
+            "tokenUrl": "https://httpbin.org/post",
+            "refreshUrl": "https://httpbin.org/post",
+            "scopes": {
+              "scope_3": "QWERTY",
+              "scope_4": "QWERTY"
+            }
           },
           "authorizationCode": {
-            "authorizationUrl": "",
-            "tokenUrl": "",
-            "refreshUrl": "",
-            "scopes": {}
+            "authorizationUrl": "https://httpbin.org/post",
+            "tokenUrl": "https://httpbin.org/post",
+            "refreshUrl": "https://httpbin.org/post",
+            "scopes": {
+              "scope_1": "QWERTY",
+              "scope_3": "QWERTY"
+            }
           }
         }
       },
