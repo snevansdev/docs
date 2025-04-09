@@ -1,235 +1,416 @@
 {
-  "openapi": "3.0.1",
-  "info": {
-    "title": "MCP Request Test",
-    "description": "",
-    "version": "1.0.0"
+  "openapi": "3.0.0",
+  "x-stoplight": {
+    "id": "4x4y70xv8qu7f"
   },
-  "tags": [],
-    "paths": {
-    "/get": {
-      "get": {
-        "summary": "GET",
-        "deprecated": false,
-        "description": "",
-        "tags": [],
-        "parameters": [
-          {
-            "name": "name",
-            "in": "query",
-            "description": "",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
+  "info": {
+    "title": "SecurityScheme",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/users/{userId}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "integer"
           },
-          {
-            "name": "age",
-            "in": "query",
-            "description": "",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "description": "Id of an existing user."
+        }
+      ],
+      "get": {
+        "summary": "Get User Info by User ID",
+        "tags": [],
         "responses": {
           "200": {
-            "description": "",
+            "description": "User Found",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {}
-                }
-              }
-            },
-            "headers": {}
-          }
-        },
-        "security": []
-      }
-    },
-    "/post": {
-      "post": {
-        "summary": "POST",
-        "deprecated": false,
-        "description": "",
-        "tags": [],
-        "parameters": [
-          {
-            "name": "name",
-            "in": "query",
-            "description": "",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "age",
-            "in": "query",
-            "description": "",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "required": false,
-            "example": "",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "description": "ID 编号",
-                    "example": "",
-                    "type": "string"
-                  },
-                  "status": {
-                    "example": "",
-                    "type": "string"
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "Get User Alice Smith": {
+                    "value": {
+                      "id": 142,
+                      "firstName": "Alice",
+                      "lastName": "Smith",
+                      "email": "alice.smith@gmail.com",
+                      "dateOfBirth": "1997-10-31",
+                      "emailVerified": true,
+                      "signUpDate": "2019-08-24"
+                    }
                   }
                 }
-              },
-              "examples": {}
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {}
-                }
               }
-            },
-            "headers": {}
-          }
-        },
-        "security": []
-      }
-    },
-    "/put": {
-      "put": {
-        "summary": "PUT",
-        "deprecated": false,
-        "description": "",
-        "tags": [],
-        "parameters": [
-          {
-            "name": "name",
-            "in": "query",
-            "description": "",
-            "required": false,
-            "example": "{{$person.firstName}}",
-            "schema": {
-              "type": "string"
             }
           },
-          {
-            "name": "city",
-            "in": "query",
-            "description": "",
-            "required": false,
-            "example": "{{$location.city}}",
-            "schema": {
-              "type": "string"
-            }
+          "404": {
+            "description": "User Not Found"
           }
-        ],
+        },
+        "operationId": "get-users-userId",
+        "description": "Retrieve the information of the user with the matching user ID.",
+        "x-stoplight": {
+          "id": "wa0bei0avaxd0"
+        },
+        "security": [
+          {
+            "apiKey_1": [],
+            "apiKey_2": [],
+            "apiKey_3": []
+          },
+          {
+            "basic": [],
+            "digest": [],
+            "bearer": []
+          },
+          {
+            "apiKey_1": [],
+            "basic": [],
+            "oauth2": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Update User Information",
+        "operationId": "patch-users-userId",
         "responses": {
           "200": {
-            "description": "",
+            "description": "User Updated",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {}
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "Updated User Rebecca Baker": {
+                    "value": {
+                      "id": 13,
+                      "firstName": "Rebecca",
+                      "lastName": "Baker",
+                      "email": "rebecca@gmail.com",
+                      "dateOfBirth": "1985-10-02",
+                      "emailVerified": false,
+                      "createDate": "2019-08-24"
+                    }
+                  }
                 }
               }
-            },
-            "headers": {}
+            }
+          },
+          "404": {
+            "description": "User Not Found"
+          },
+          "409": {
+            "description": "Email Already Taken"
           }
         },
-        "security": []
-      }
-    },
-    "/delete": {
-      "delete": {
-        "summary": "DELETE",
-        "deprecated": false,
-        "description": "",
-        "tags": [],
-        "parameters": [],
+        "description": "Update the information of an existing user.",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "name": {
+                  "firstName": {
                     "type": "string"
                   },
-                  "age": {
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "If a new email is given, the user's email verified property will be set to false."
+                  },
+                  "dateOfBirth": {
                     "type": "string"
                   }
-                },
-                "required": [
-                  "name",
-                  "age"
-                ]
+                }
               },
-              "examples": {}
+              "examples": {
+                "Update First Name": {
+                  "value": {
+                    "firstName": "Rebecca"
+                  }
+                },
+                "Update Email": {
+                  "value": {
+                    "email": "rebecca@gmail.com"
+                  }
+                },
+                "Update Last Name & Date of Birth": {
+                  "value": {
+                    "lastName": "Baker",
+                    "dateOfBirth": "1985-10-02"
+                  }
+                }
+              }
             }
-          }
+          },
+          "description": "Patch user properties to update."
         },
+        "x-stoplight": {
+          "id": "npw2746s5njgk"
+        }
+      }
+    },
+    "/user": {
+      "post": {
+        "summary": "Create New User",
+        "operationId": "post-user",
         "responses": {
           "200": {
-            "description": "",
+            "description": "User Created",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {}
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "New User Bob Fellow": {
+                    "value": {
+                      "id": 12,
+                      "firstName": "Bob",
+                      "lastName": "Fellow",
+                      "email": "bob.fellow@gmail.com",
+                      "dateOfBirth": "1996-08-24",
+                      "emailVerified": false,
+                      "createDate": "2020-11-18"
+                    }
+                  }
                 }
               }
-            },
-            "headers": {}
+            }
+          },
+          "400": {
+            "description": "Missing Required Information"
+          },
+          "409": {
+            "description": "Email Already Taken"
           }
         },
-        "security": []
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "dateOfBirth": {
+                    "type": "string",
+                    "format": "date"
+                  }
+                },
+                "required": [
+                  "firstName",
+                  "lastName",
+                  "email",
+                  "dateOfBirth"
+                ]
+              },
+              "examples": {
+                "Create User Bob Fellow": {
+                  "value": {
+                    "firstName": "Bob",
+                    "lastName": "Fellow",
+                    "email": "bob.fellow@gmail.com",
+                    "dateOfBirth": "1996-08-24"
+                  }
+                }
+              }
+            }
+          },
+          "description": "Post the necessary fields for the API to create a new user."
+        },
+        "description": "Create a new user.",
+        "x-stoplight": {
+          "id": "dlfw3jcumxdma"
+        }
       }
     }
   },
   "components": {
-    "schemas": {},
-    "securitySchemes": {}
-  },
-  "servers": [
-    {
-      "url": "https://httpbin.org"
+    "schemas": {
+      "User": {
+        "title": "User",
+        "type": "object",
+        "description": "",
+        "x-examples": {
+          "Alice Smith": {
+            "id": 142,
+            "firstName": "Alice",
+            "lastName": "Smith",
+            "email": "alice.smith@gmail.com",
+            "dateOfBirth": "1997-10-31",
+            "emailVerified": true,
+            "signUpDate": "2019-08-24"
+          }
+        },
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier for the given user.",
+            "x-stoplight": {
+              "id": "vsa0kfllme90y"
+            }
+          },
+          "firstName": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "350mfbr9yrcst"
+            }
+          },
+          "lastName": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "pm7vo4gw71pcp"
+            }
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "x-stoplight": {
+              "id": "f5xpcvrijb8c6"
+            }
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date",
+            "example": "1997-10-31",
+            "x-stoplight": {
+              "id": "11uyvxlls6x9m"
+            }
+          },
+          "emailVerified": {
+            "type": "boolean",
+            "description": "Set to true if the user's email has been verified.",
+            "x-stoplight": {
+              "id": "n4c52zmins70x"
+            }
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date",
+            "description": "The date that the user was created.",
+            "x-stoplight": {
+              "id": "d7vflpy13lv76"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "firstName",
+          "lastName",
+          "email",
+          "emailVerified"
+        ],
+        "x-stoplight": {
+          "id": "qsyxezmb9vq35"
+        }
+      }
     },
-    {
-      "url": "https://echo.apifox.com"
-    },
-    {
-      "url": "https://postman-echo.com"
+    "securitySchemes": {
+      "apiKey_1": {
+        "name": "apiKey",
+        "type": "apiKey",
+        "in": "query"
+      },
+      "apiKey_2": {
+        "name": "apiKey",
+        "type": "apiKey",
+        "in": "header"
+      },
+      "apiKey_3": {
+        "name": "apiKey",
+        "type": "apiKey",
+        "in": "cookie"
+      },
+      "basic": {
+        "type": "http",
+        "scheme": "basic"
+      },
+      "bearer": {
+        "type": "http",
+        "scheme": "bearer"
+      },
+      "digest": {
+        "type": "http",
+        "scheme": "digest"
+      },
+      "hoba": {
+        "type": "http",
+        "scheme": "hoba"
+      },
+      "mutual": {
+        "type": "http",
+        "scheme": "mutual"
+      },
+      "negotiate": {
+        "type": "http",
+        "scheme": "negotiate"
+      },
+      "oauth": {
+        "type": "http",
+        "scheme": "oauth"
+      },
+      "scram-sha-1": {
+        "type": "http",
+        "scheme": "scram-sha-1"
+      },
+      "scram-sha-256": {
+        "type": "http",
+        "scheme": "scram-sha-256"
+      },
+      "vapid": {
+        "type": "http",
+        "scheme": "vapid"
+      },
+      "oauth2": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "",
+            "refreshUrl": "",
+            "scopes": {}
+          },
+          "password": {
+            "tokenUrl": "",
+            "refreshUrl": "",
+            "scopes": {}
+          },
+          "clientCredentials": {
+            "tokenUrl": "",
+            "refreshUrl": "",
+            "scopes": {}
+          },
+          "authorizationCode": {
+            "authorizationUrl": "",
+            "tokenUrl": "",
+            "refreshUrl": "",
+            "scopes": {}
+          }
+        }
+      },
+      "oidc": {
+        "type": "openIdConnect",
+        "openIdConnectUrl": "https://httpbin.org/post"
+      }
     }
-  ],
-  "security": []
+  }
 }
