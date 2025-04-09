@@ -75,7 +75,10 @@
           {
             "apiKey_1": [],
             "basic": [],
-            "oauth2": []
+            "oauth2": [
+              "scope_1",
+              "scope_3"
+            ]
           }
         ]
       },
