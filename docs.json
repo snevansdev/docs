@@ -39,7 +39,7 @@
         "groups": [
           {
             "group": "API Documentation",
-            "openapi": "https://petstore3.swagger.io/api/v3/openapi.json"
+            "openapi": "api-reference/openapi.json"
           },
           {
             "group": "Endpoint Examples",
