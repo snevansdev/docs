@@ -1,70 +1,659 @@
 openapi: 3.1.0
 info:
-  title: API with Multiple Media Types and Bearer Security
+  title: HTTP Authentication Schemes API
+  description: |
+    Comprehensive API demonstrating all HTTP authentication schemes from the IANA registry.
+    Based on https://www.iana.org/assignments/http-authschemes/http-authschemes.xhtml
   version: 1.0.0
-  description: A simple API with one endpoint that accepts JSON and XML media types and uses Bearer token authentication
+  contact:
+    name: API Support
+    email: support@example.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
 
 servers:
   - url: https://api.example.com/v1
     description: Production server
+  - url: https://staging-api.example.com/v1
+    description: Staging server
+
+security:
+  - ApiKeyAuth: []
+
+paths:
+  # Basic Authentication Schemes
+  /auth/basic/users:
+    get:
+      tags: [Basic Authentication]
+      summary: Get users with Basic Auth
+      security:
+        - BasicAuth: []
+      responses:
+        '200':
+          description: Users retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+  /auth/basic/profile:
+    post:
+      tags: [Basic Authentication]
+      summary: Update profile with Basic Auth
+      security:
+        - BasicAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+      responses:
+        '200':
+          description: Profile updated successfully
+
+  # Bearer Token Schemes (JWT)
+  /auth/bearer-jwt/tokens:
+    get:
+      tags: [Bearer JWT Authentication]
+      summary: Get tokens with Bearer JWT Auth
+      security:
+        - BearerJWTAuth: []
+      responses:
+        '200':
+          description: Tokens retrieved successfully
+  /auth/bearer-jwt/refresh:
+    post:
+      tags: [Bearer JWT Authentication]
+      summary: Refresh token with Bearer JWT Auth
+      security:
+        - BearerJWTAuth: []
+      responses:
+        '200':
+          description: Token refreshed successfully
+
+  # Bearer Token Schemes (Plain)
+  /auth/bearer-plain/tokens:
+    get:
+      tags: [Bearer Plain Authentication]
+      summary: Get tokens with Bearer Plain Auth
+      security:
+        - BearerPlainAuth: []
+      responses:
+        '200':
+          description: Tokens retrieved successfully
+  /auth/bearer-plain/refresh:
+    post:
+      tags: [Bearer Plain Authentication]
+      summary: Refresh token with Bearer Plain Auth
+      security:
+        - BearerPlainAuth: []
+      responses:
+        '200':
+          description: Token refreshed successfully
+
+  # Concealed Authentication Schemes
+  /auth/concealed/secure:
+    get:
+      tags: [Concealed Authentication]
+      summary: Get secure data with Concealed Auth
+      security:
+        - ConcealedAuth: []
+      responses:
+        '200':
+          description: Secure data retrieved
+  /auth/concealed/private:
+    post:
+      tags: [Concealed Authentication]
+      summary: Access private area with Concealed Auth
+      security:
+        - ConcealedAuth: []
+      responses:
+        '200':
+          description: Private access granted
+
+  # Digest Authentication Schemes
+  /auth/digest/resources:
+    get:
+      tags: [Digest Authentication]
+      summary: Get resources with Digest Auth
+      security:
+        - DigestAuth: []
+      responses:
+        '200':
+          description: Resources retrieved successfully
+  /auth/digest/protected:
+    put:
+      tags: [Digest Authentication]
+      summary: Update protected resource with Digest Auth
+      security:
+        - DigestAuth: []
+      responses:
+        '200':
+          description: Resource updated successfully
+
+  # DPoP Authentication Schemes
+  /auth/dpop/authorized:
+    get:
+      tags: [DPoP Authentication]
+      summary: Get authorized data with DPoP
+      security:
+        - DPoPAuth: []
+      responses:
+        '200':
+          description: Authorized data retrieved
+  /auth/dpop/verify:
+    post:
+      tags: [DPoP Authentication]
+      summary: Verify DPoP token
+      security:
+        - DPoPAuth: []
+      responses:
+        '200':
+          description: DPoP token verified
+
+  # GNAP Authentication Schemes
+  /auth/gnap/grants:
+    get:
+      tags: [GNAP Authentication]
+      summary: Get grants with GNAP
+      security:
+        - GNAPAuth: []
+      responses:
+        '200':
+          description: Grants retrieved successfully
+  /auth/gnap/interact:
+    post:
+      tags: [GNAP Authentication]
+      summary: Interact with GNAP
+      security:
+        - GNAPAuth: []
+      responses:
+        '200':
+          description: GNAP interaction completed
+
+  # HOBA Authentication Schemes
+  /auth/hoba/challenge:
+    get:
+      tags: [HOBA Authentication]
+      summary: Get HOBA challenge
+      security:
+        - HOBAChallenge: []
+      responses:
+        '200':
+          description: Challenge generated
+  /auth/hoba/verify:
+    post:
+      tags: [HOBA Authentication]
+      summary: Verify HOBA response
+      security:
+        - HOBAVerify: []
+      responses:
+        '200':
+          description: HOBA verification successful
+
+  # Mutual TLS Authentication Schemes
+  /auth/mutual/certificates:
+    get:
+      tags: [Mutual TLS]
+      summary: Get certificates with Mutual TLS
+      security:
+        - MutualTLS: []
+      responses:
+        '200':
+          description: Certificates retrieved
+  /auth/mutual/secure-channel:
+    post:
+      tags: [Mutual TLS]
+      summary: Establish secure channel with Mutual TLS
+      security:
+        - MutualTLS: []
+      responses:
+        '200':
+          description: Secure channel established
+
+  # Negotiate Authentication Schemes
+  /auth/negotiate/kerberos:
+    get:
+      tags: [Negotiate Authentication]
+      summary: Get data with Negotiate (Kerberos)
+      security:
+        - NegotiateAuth: []
+      responses:
+        '200':
+          description: Data retrieved with Kerberos
+  /auth/negotiate/ntlm:
+    post:
+      tags: [Negotiate Authentication]
+      summary: Authenticate with Negotiate (NTLM)
+      security:
+        - NegotiateAuth: []
+      responses:
+        '200':
+          description: NTLM authentication successful
+
+  # OAuth 2.0 Authentication Schemes (Authorization Code Flow)
+  /auth/oauth2/authorize:
+    get:
+      tags: [OAuth 2.0 Authentication]
+      summary: OAuth 2.0 authorization endpoint (Authorization Code Flow)
+      security:
+        - OAuth2Auth: [read:users, write:users]
+      responses:
+        '200':
+          description: Authorization successful
+  /auth/oauth2/token:
+    post:
+      tags: [OAuth 2.0 Authentication]
+      summary: OAuth 2.0 token endpoint (Authorization Code Flow)
+      security:
+        - OAuth2Auth: [read:users, write:users, admin:users]
+      responses:
+        '200':
+          description: Token issued successfully
+
+  # OAuth 2.0 Client Credentials Flow
+  /auth/oauth2/client-credentials:
+    post:
+      tags: [OAuth 2.0 Authentication]
+      summary: OAuth 2.0 client credentials flow
+      security:
+        - OAuth2Auth: [read:system, write:system]
+      responses:
+        '200':
+          description: Client credentials token issued successfully
+
+  # OAuth 2.0 Password Flow
+  /auth/oauth2/password:
+    post:
+      tags: [OAuth 2.0 Authentication]
+      summary: OAuth 2.0 resource owner password credentials flow
+      security:
+        - OAuth2Auth: [read:users, write:users]
+      responses:
+        '200':
+          description: Password flow token issued successfully
+
+  # OAuth 2.0 Implicit Flow
+  /auth/oauth2/implicit:
+    get:
+      tags: [OAuth 2.0 Authentication]
+      summary: OAuth 2.0 implicit flow
+      security:
+        - OAuth2Auth: [read:users]
+      responses:
+        '200':
+          description: Implicit flow authorization successful
+
+  # OAuth 1.0 Authentication Schemes
+  /auth/oauth1/request-token:
+    post:
+      tags: [OAuth 1.0 Authentication]
+      summary: OAuth 1.0 request token endpoint
+      security:
+        - OAuth1Auth: []
+      responses:
+        '200':
+          description: Request token issued successfully
+  /auth/oauth1/access-token:
+    post:
+      tags: [OAuth 1.0 Authentication]
+      summary: OAuth 1.0 access token endpoint
+      security:
+        - OAuth1Auth: []
+      responses:
+        '200':
+          description: Access token issued successfully
+
+  # PrivateToken Authentication Schemes
+  /auth/privatetoken/issue:
+    post:
+      tags: [PrivateToken Authentication]
+      summary: Issue private token
+      security:
+        - PrivateTokenAuth: []
+      responses:
+        '200':
+          description: Private token issued
+  /auth/privatetoken/redeem:
+    post:
+      tags: [PrivateToken Authentication]
+      summary: Redeem private token
+      security:
+        - PrivateTokenAuth: []
+      responses:
+        '200':
+          description: Private token redeemed
+
+  # SCRAM-SHA-1 Authentication Schemes
+  /auth/scram-sha1/authenticate:
+    post:
+      tags: [SCRAM-SHA-1 Authentication]
+      summary: Authenticate with SCRAM-SHA-1
+      security:
+        - SCRAMSHA1Auth: []
+      responses:
+        '200':
+          description: SCRAM-SHA-1 authentication successful
+  /auth/scram-sha1/verify:
+    post:
+      tags: [SCRAM-SHA-1 Authentication]
+      summary: Verify SCRAM-SHA-1
+      security:
+        - SCRAMSHA1Auth: []
+      responses:
+        '200':
+          description: SCRAM-SHA-1 verification successful
+
+  # SCRAM-SHA-256 Authentication Schemes
+  /auth/scram-sha256/authenticate:
+    post:
+      tags: [SCRAM-SHA-256 Authentication]
+      summary: Authenticate with SCRAM-SHA-256
+      security:
+        - SCRAMSHA256Auth: []
+      responses:
+        '200':
+          description: SCRAM-SHA-256 authentication successful
+  /auth/scram-sha256/verify:
+    post:
+      tags: [SCRAM-SHA-256 Authentication]
+      summary: Verify SCRAM-SHA-256
+      security:
+        - SCRAMSHA256Auth: []
+      responses:
+        '200':
+          description: SCRAM-SHA-256 verification successful
+
+  # API Key Authentication Schemes
+  /auth/apikey/resources:
+    get:
+      tags: [API Key Authentication]
+      summary: Get resources using API Key
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Resources retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resources:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        name:
+                          type: string
+                        type:
+                          type: string
+  /auth/apikey/update:
+    put:
+      tags: [API Key Authentication]
+      summary: Update resources using API Key
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                resource_id:
+                  type: string
+                  format: uuid
+                data:
+                  type: object
+                  additionalProperties: true
+              required:
+                - resource_id
+                - data
+      responses:
+        '200':
+          description: Resource updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  
+  # VAPID Authentication Schemes
+  /auth/vapid/push:
+    post:
+      tags: [VAPID Authentication]
+      summary: Send push notification with VAPID
+      security:
+        - VAPIDAuth: []
+      responses:
+        '200':
+          description: Push notification sent
+  /auth/vapid/subscribe:
+    post:
+      tags: [VAPID Authentication]
+      summary: Subscribe with VAPID
+      security:
+        - VAPIDAuth: []
+      responses:
+        '200':
+          description: Subscription successful
 
 components:
   securitySchemes:
-    bearerAuth:
+    # Global API Key
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: Global API key for basic access
+
+    # Basic Authentication
+    BasicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic Authentication (RFC 7617)
+
+    # Bearer Token Authentication (JWT)
+    BearerJWTAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-      description: JWT Bearer token authentication
-  
+      description: Bearer token authentication with JWT format (RFC 6750)
+
+    # Bearer Token Authentication (Plain)
+    BearerPlainAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token authentication with plain token format (RFC 6750)
+
+    # Concealed Authentication
+    ConcealedAuth:
+      type: http
+      scheme: concealed
+      description: Concealed authentication (RFC 9729)
+
+    # Digest Authentication
+    DigestAuth:
+      type: http
+      scheme: digest
+      description: HTTP Digest Authentication (RFC 7616)
+
+    # DPoP Authentication
+    DPoPAuth:
+      type: http
+      scheme: DPoP
+      description: Demonstrating Proof of Possession (RFC 9449)
+
+    # GNAP Authentication
+    GNAPAuth:
+      type: http
+      scheme: GNAP
+      description: Grant Negotiation and Authorization Protocol (RFC 9635)
+
+    # HOBA Authentication
+    HOBAChallenge:
+      type: http
+      scheme: HOBA
+      description: HTTP Origin-Bound Authentication - Challenge (RFC 7486)
+    HOBAVerify:
+      type: http
+      scheme: HOBA
+      description: HTTP Origin-Bound Authentication - Verification (RFC 7486)
+
+    # Mutual TLS Authentication
+    MutualTLS:
+      type: mutualTLS
+      description: Mutual TLS with client certificates (RFC 8120)
+
+    # Negotiate Authentication
+    NegotiateAuth:
+      type: http
+      scheme: Negotiate
+      description: HTTP Negotiate Authentication (RFC 4559)
+
+    # OAuth 2.0 Authentication (Authorization Code Flow)
+    OAuth2Auth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.example.com/oauth2/authorize
+          tokenUrl: https://auth.example.com/oauth2/token
+          scopes:
+            read:users: Read user information
+            write:users: Write user information
+            admin:users: Admin user operations
+        clientCredentials:
+          tokenUrl: https://auth.example.com/oauth2/token
+          scopes:
+            read:system: Read system information
+            write:system: Write system information
+        password:
+          tokenUrl: https://auth.example.com/oauth2/token
+          scopes:
+            read:users: Read user information
+            write:users: Write user information
+        implicit:
+          authorizationUrl: https://auth.example.com/oauth2/authorize
+          scopes:
+            read:users: Read user information
+            write:users: Write user information
+      description: OAuth 2.0 authentication with multiple flows (RFC 6749)
+
+    # OAuth 1.0 Authentication
+    OAuth1Auth:
+      type: http
+      scheme: OAuth
+      description: OAuth 1.0 authentication (RFC 5849)
+
+    # PrivateToken Authentication
+    PrivateTokenAuth:
+      type: http
+      scheme: PrivateToken
+      description: Private Access Token Authentication (RFC 9577)
+
+    # SCRAM-SHA-1 Authentication
+    SCRAMSHA1Auth:
+      type: http
+      scheme: SCRAM-SHA-1
+      description: SCRAM-SHA-1 authentication (RFC 7804)
+
+    # SCRAM-SHA-256 Authentication
+    SCRAMSHA256Auth:
+      type: http
+      scheme: SCRAM-SHA-256
+      description: SCRAM-SHA-256 authentication (RFC 7804)
+
+    # VAPID Authentication
+    VAPIDAuth:
+      type: http
+      scheme: vapid
+      description: Voluntary Application Server Identification (RFC 8292)
+
   schemas:
     User:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
-          description: User ID
-        name:
           type: string
-          description: User name
+          format: uuid
+        username:
+          type: string
         email:
           type: string
           format: email
-          description: User email address
+        created_at:
+          type: string
+          format: date-time
       required:
         - id
-        - name
+        - username
         - email
 
-paths:
-  /users:
-    post:
-      summary: Create a new user
-      description: Creates a new user with the provided information
-      operationId: createUser
-      security:
-        - bearerAuth: []
-      requestBody:
-        description: User information
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/User'
-      responses:
-        '201':
-          description: User created successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/User'
-        '400':
-          description: Invalid input
-        '401':
-          description: Unauthorized
+    UserProfile:
+      type: object
+      properties:
+        full_name:
+          type: string
+        bio:
+          type: string
+        preferences:
+          type: object
+          properties:
+            theme:
+              type: string
+              enum: [light, dark]
+            language:
+              type: string
+              default: en
+      required:
+        - full_name
+
+tags:
+  - name: API Key Authentication
+    description: API Key Authentication endpoints
+  - name: Basic Authentication
+    description: HTTP Basic Authentication endpoints
+  - name: Bearer JWT Authentication
+    description: Bearer token authentication with JWT format endpoints
+  - name: Bearer Plain Authentication
+    description: Bearer token authentication with plain token format endpoints
+  - name: Concealed Authentication
+    description: Concealed authentication endpoints
+  - name: Digest Authentication
+    description: HTTP Digest Authentication endpoints
+  - name: DPoP Authentication
+    description: Demonstrating Proof of Possession endpoints
+  - name: GNAP Authentication
+    description: Grant Negotiation and Authorization Protocol endpoints
+  - name: HOBA Authentication
+    description: HTTP Origin-Bound Authentication endpoints
+  - name: Mutual TLS
+    description: Mutual TLS authentication endpoints
+  - name: Negotiate Authentication
+    description: HTTP Negotiate Authentication endpoints
+  - name: OAuth 2.0 Authentication
+    description: OAuth 2.0 authentication endpoints
+  - name: OAuth 1.0 Authentication
+    description: OAuth 1.0 authentication endpoints
+  - name: PrivateToken Authentication
+    description: Private Access Token Authentication endpoints
+  - name: SCRAM-SHA-1 Authentication
+    description: SCRAM-SHA-1 authentication endpoints
+  - name: SCRAM-SHA-256 Authentication
+    description: SCRAM-SHA-256 authentication endpoints
+  - name: VAPID Authentication
+    description: Voluntary Application Server Identification endpoints 
