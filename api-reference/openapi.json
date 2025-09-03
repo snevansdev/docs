@@ -13,10 +13,8 @@ info:
     url: https://opensource.org/licenses/MIT
 
 servers:
-  - url: https://api.example.com/v1
+  - url: https://httpbin.org/anything
     description: Production server
-  - url: https://staging-api.example.com/v1
-    description: Staging server
 
 security:
   - ApiKeyAuth: []
