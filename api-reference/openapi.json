@@ -460,6 +460,7 @@ paths:
       description: |
         This endpoint accepts multiple authentication methods. The user can choose 
         any ONE of the following: API Key, Basic Auth, or Bearer JWT.
+        Each security scheme is in a separate array element (OR logic).
       security:
         - ApiKeyAuth: []
         - BasicAuth: []
@@ -492,10 +493,11 @@ paths:
       description: |
         This endpoint requires ALL authentication methods simultaneously:
         API Key AND Basic Auth AND Bearer JWT. All three must be provided.
+        All security schemes are in the same array element (AND logic).
       security:
         - ApiKeyAuth: []
-        - BasicAuth: []
-        - BearerJWTAuth: []
+          BasicAuth: []
+          BearerJWTAuth: []
       requestBody:
         required: true
         content:
