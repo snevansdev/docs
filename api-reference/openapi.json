@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: HTTP Authentication Schemes API
+  title: HTTP Authentication Schemes API 2
   description: |
     Comprehensive API demonstrating all HTTP authentication schemes from the IANA registry.
     Based on https://www.iana.org/assignments/http-authschemes/http-authschemes.xhtml
