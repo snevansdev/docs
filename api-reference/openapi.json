@@ -1,408 +1,26 @@
 openapi: 3.1.0
 info:
-  title: HTTP Authentication Schemes API 2
-  description: |
-    Comprehensive API demonstrating all HTTP authentication schemes from the IANA registry.
-    Based on https://www.iana.org/assignments/http-authschemes/http-authschemes.xhtml
+  title: Response Validation API
+  description: API for testing OpenAPI 3.1 response validation capabilities
   version: 1.0.0
   contact:
     name: API Support
     email: support@example.com
   license:
     name: MIT
-    url: https://opensource.org/licenses/MIT
-
+    url: 'https://opensource.org/licenses/MIT'
 servers:
-  - url: https://api.example.com/v1
+  - url: 'https://api.example.com/v1'
     description: Production server
-  - url: https://staging-api.example.com/v1
+  - url: 'https://staging-api.example.com/v1'
     description: Staging server
-
-security:
-  - ApiKeyAuth: []
-
 paths:
-  # Basic Authentication Schemes
-  /auth/basic/users:
-    get:
-      tags: [Basic Authentication]
-      summary: Get users with Basic Auth
-      security:
-        - BasicAuth: []
-      responses:
-        '200':
-          description: Users retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  users:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/User'
-  /auth/basic/profile:
+  # 批量操作端点 - 使用引用response
+  /users:
     post:
-      tags: [Basic Authentication]
-      summary: Update profile with Basic Auth
-      security:
-        - BasicAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserProfile'
-      responses:
-        '200':
-          description: Profile updated successfully
-
-  # Bearer Token Schemes (JWT)
-  /auth/bearer-jwt/tokens:
-    get:
-      tags: [Bearer JWT Authentication]
-      summary: Get tokens with Bearer JWT Auth
-      security:
-        - BearerJWTAuth: []
-      responses:
-        '200':
-          description: Tokens retrieved successfully
-  /auth/bearer-jwt/refresh:
-    post:
-      tags: [Bearer JWT Authentication]
-      summary: Refresh token with Bearer JWT Auth
-      security:
-        - BearerJWTAuth: []
-      responses:
-        '200':
-          description: Token refreshed successfully
-
-  # Bearer Token Schemes (Plain)
-  /auth/bearer-plain/tokens:
-    get:
-      tags: [Bearer Plain Authentication]
-      summary: Get tokens with Bearer Plain Auth
-      security:
-        - BearerPlainAuth: []
-      responses:
-        '200':
-          description: Tokens retrieved successfully
-  /auth/bearer-plain/refresh:
-    post:
-      tags: [Bearer Plain Authentication]
-      summary: Refresh token with Bearer Plain Auth
-      security:
-        - BearerPlainAuth: []
-      responses:
-        '200':
-          description: Token refreshed successfully
-
-  # Concealed Authentication Schemes
-  /auth/concealed/secure:
-    get:
-      tags: [Concealed Authentication]
-      summary: Get secure data with Concealed Auth
-      security:
-        - ConcealedAuth: []
-      responses:
-        '200':
-          description: Secure data retrieved
-  /auth/concealed/private:
-    post:
-      tags: [Concealed Authentication]
-      summary: Access private area with Concealed Auth
-      security:
-        - ConcealedAuth: []
-      responses:
-        '200':
-          description: Private access granted
-
-  # Digest Authentication Schemes
-  /auth/digest/resources:
-    get:
-      tags: [Digest Authentication]
-      summary: Get resources with Digest Auth
-      security:
-        - DigestAuth: []
-      responses:
-        '200':
-          description: Resources retrieved successfully
-  /auth/digest/protected:
-    put:
-      tags: [Digest Authentication]
-      summary: Update protected resource with Digest Auth
-      security:
-        - DigestAuth: []
-      responses:
-        '200':
-          description: Resource updated successfully
-
-  # DPoP Authentication Schemes
-  /auth/dpop/authorized:
-    get:
-      tags: [DPoP Authentication]
-      summary: Get authorized data with DPoP
-      security:
-        - DPoPAuth: []
-      responses:
-        '200':
-          description: Authorized data retrieved
-  /auth/dpop/verify:
-    post:
-      tags: [DPoP Authentication]
-      summary: Verify DPoP token
-      security:
-        - DPoPAuth: []
-      responses:
-        '200':
-          description: DPoP token verified
-
-  # GNAP Authentication Schemes
-  /auth/gnap/grants:
-    get:
-      tags: [GNAP Authentication]
-      summary: Get grants with GNAP
-      security:
-        - GNAPAuth: []
-      responses:
-        '200':
-          description: Grants retrieved successfully
-  /auth/gnap/interact:
-    post:
-      tags: [GNAP Authentication]
-      summary: Interact with GNAP
-      security:
-        - GNAPAuth: []
-      responses:
-        '200':
-          description: GNAP interaction completed
-
-  # HOBA Authentication Schemes
-  /auth/hoba/challenge:
-    get:
-      tags: [HOBA Authentication]
-      summary: Get HOBA challenge
-      security:
-        - HOBAChallenge: []
-      responses:
-        '200':
-          description: Challenge generated
-  /auth/hoba/verify:
-    post:
-      tags: [HOBA Authentication]
-      summary: Verify HOBA response
-      security:
-        - HOBAVerify: []
-      responses:
-        '200':
-          description: HOBA verification successful
-
-  # Mutual TLS Authentication Schemes
-  /auth/mutual/certificates:
-    get:
-      tags: [Mutual TLS]
-      summary: Get certificates with Mutual TLS
-      security:
-        - MutualTLS: []
-      responses:
-        '200':
-          description: Certificates retrieved
-  /auth/mutual/secure-channel:
-    post:
-      tags: [Mutual TLS]
-      summary: Establish secure channel with Mutual TLS
-      security:
-        - MutualTLS: []
-      responses:
-        '200':
-          description: Secure channel established
-
-  # Negotiate Authentication Schemes
-  /auth/negotiate/kerberos:
-    get:
-      tags: [Negotiate Authentication]
-      summary: Get data with Negotiate (Kerberos)
-      security:
-        - NegotiateAuth: []
-      responses:
-        '200':
-          description: Data retrieved with Kerberos
-  /auth/negotiate/ntlm:
-    post:
-      tags: [Negotiate Authentication]
-      summary: Authenticate with Negotiate (NTLM)
-      security:
-        - NegotiateAuth: []
-      responses:
-        '200':
-          description: NTLM authentication successful
-
-  # OAuth 2.0 Authentication Schemes (Authorization Code Flow)
-  /auth/oauth2/authorize:
-    get:
-      tags: [OAuth 2.0 Authentication]
-      summary: OAuth 2.0 authorization endpoint (Authorization Code Flow)
-      security:
-        - OAuth2Auth: [read:users, write:users]
-      responses:
-        '200':
-          description: Authorization successful
-  /auth/oauth2/token:
-    post:
-      tags: [OAuth 2.0 Authentication]
-      summary: OAuth 2.0 token endpoint (Authorization Code Flow)
-      security:
-        - OAuth2Auth: [read:users, write:users, admin:users]
-      responses:
-        '200':
-          description: Token issued successfully
-
-  # OAuth 2.0 Client Credentials Flow
-  /auth/oauth2/client-credentials:
-    post:
-      tags: [OAuth 2.0 Authentication]
-      summary: OAuth 2.0 client credentials flow
-      security:
-        - OAuth2Auth: [read:system, write:system]
-      responses:
-        '200':
-          description: Client credentials token issued successfully
-
-  # OAuth 2.0 Password Flow
-  /auth/oauth2/password:
-    post:
-      tags: [OAuth 2.0 Authentication]
-      summary: OAuth 2.0 resource owner password credentials flow
-      security:
-        - OAuth2Auth: [read:users, write:users]
-      responses:
-        '200':
-          description: Password flow token issued successfully
-
-  # OAuth 2.0 Implicit Flow
-  /auth/oauth2/implicit:
-    get:
-      tags: [OAuth 2.0 Authentication]
-      summary: OAuth 2.0 implicit flow
-      security:
-        - OAuth2Auth: [read:users]
-      responses:
-        '200':
-          description: Implicit flow authorization successful
-
-  # OAuth 1.0 Authentication Schemes
-  /auth/oauth1/request-token:
-    post:
-      tags: [OAuth 1.0 Authentication]
-      summary: OAuth 1.0 request token endpoint
-      security:
-        - OAuth1Auth: []
-      responses:
-        '200':
-          description: Request token issued successfully
-  /auth/oauth1/access-token:
-    post:
-      tags: [OAuth 1.0 Authentication]
-      summary: OAuth 1.0 access token endpoint
-      security:
-        - OAuth1Auth: []
-      responses:
-        '200':
-          description: Access token issued successfully
-
-  # PrivateToken Authentication Schemes
-  /auth/privatetoken/issue:
-    post:
-      tags: [PrivateToken Authentication]
-      summary: Issue private token
-      security:
-        - PrivateTokenAuth: []
-      responses:
-        '200':
-          description: Private token issued
-  /auth/privatetoken/redeem:
-    post:
-      tags: [PrivateToken Authentication]
-      summary: Redeem private token
-      security:
-        - PrivateTokenAuth: []
-      responses:
-        '200':
-          description: Private token redeemed
-
-  # SCRAM-SHA-1 Authentication Schemes
-  /auth/scram-sha1/authenticate:
-    post:
-      tags: [SCRAM-SHA-1 Authentication]
-      summary: Authenticate with SCRAM-SHA-1
-      security:
-        - SCRAMSHA1Auth: []
-      responses:
-        '200':
-          description: SCRAM-SHA-1 authentication successful
-  /auth/scram-sha1/verify:
-    post:
-      tags: [SCRAM-SHA-1 Authentication]
-      summary: Verify SCRAM-SHA-1
-      security:
-        - SCRAMSHA1Auth: []
-      responses:
-        '200':
-          description: SCRAM-SHA-1 verification successful
-
-  # SCRAM-SHA-256 Authentication Schemes
-  /auth/scram-sha256/authenticate:
-    post:
-      tags: [SCRAM-SHA-256 Authentication]
-      summary: Authenticate with SCRAM-SHA-256
-      security:
-        - SCRAMSHA256Auth: []
-      responses:
-        '200':
-          description: SCRAM-SHA-256 authentication successful
-  /auth/scram-sha256/verify:
-    post:
-      tags: [SCRAM-SHA-256 Authentication]
-      summary: Verify SCRAM-SHA-256
-      security:
-        - SCRAMSHA256Auth: []
-      responses:
-        '200':
-          description: SCRAM-SHA-256 verification successful
-
-  # API Key Authentication Schemes
-  /auth/apikey/resources:
-    get:
-      tags: [API Key Authentication]
-      summary: Get resources using API Key
-      security:
-        - ApiKeyAuth: []
-      responses:
-        '200':
-          description: Resources retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  resources:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          format: uuid
-                        name:
-                          type: string
-                        type:
-                          type: string
-  /auth/apikey/update:
-    put:
-      tags: [API Key Authentication]
-      summary: Update resources using API Key
-      security:
-        - ApiKeyAuth: []
+      summary: Create multiple users
+      description: Create multiple users in a single request
+      operationId: createUsers
       requestBody:
         required: true
         content:
@@ -410,333 +28,375 @@ paths:
             schema:
               type: object
               properties:
-                resource_id:
-                  type: string
-                  format: uuid
-                data:
-                  type: object
-                  additionalProperties: true
+                users:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/UserInput'
+                  minItems: 1
+                  maxItems: 100
               required:
-                - resource_id
-                - data
+                - users
       responses:
-        '200':
-          description: Resource updated successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  message:
-                    type: string
-  
-  # VAPID Authentication Schemes
-  /auth/vapid/push:
-    post:
-      tags: [VAPID Authentication]
-      summary: Send push notification with VAPID
-      security:
-        - VAPIDAuth: []
-      responses:
-        '200':
-          description: Push notification sent
-  /auth/vapid/subscribe:
-    post:
-      tags: [VAPID Authentication]
-      summary: Subscribe with VAPID
-      security:
-        - VAPIDAuth: []
-      responses:
-        '200':
-          description: Subscription successful
-
-  # Multiple Security Schemes (OR Logic - User chooses one)
-  /auth/multiple/or/secure-data:
-    get:
-      tags: [Multiple Security Schemes]
-      summary: Get secure data with multiple authentication options (OR logic)
-      description: |
-        This endpoint accepts multiple authentication methods. The user can choose 
-        any ONE of the following: API Key, Basic Auth, or Bearer JWT.
-        Each security scheme is in a separate array element (OR logic).
-      security:
-        - ApiKeyAuth: []
-        - BasicAuth: []
-        - BearerJWTAuth: []
-      responses:
-        '200':
-          description: Secure data retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: string
-                    description: Secure data content
-                  auth_method:
-                    type: string
-                    description: Authentication method used
-                    enum: [api_key, basic, bearer_jwt]
-        '401':
-          description: Authentication required
-        '403':
-          description: Access forbidden
-
-  # Multiple Security Schemes (AND Logic - User must use all)
-  /auth/multiple/and/ultra-secure:
-    post:
-      tags: [Multiple Security Schemes]
-      summary: Access ultra-secure resource (AND logic)
-      description: |
-        This endpoint requires ALL authentication methods simultaneously:
-        API Key AND Basic Auth AND Bearer JWT. All three must be provided.
-        All security schemes are in the same array element (AND logic).
-      security:
-        - ApiKeyAuth: []
-          BasicAuth: []
-          BearerJWTAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                action:
-                  type: string
-                  description: Action to perform on ultra-secure resource
-                data:
-                  type: object
-                  description: Data to process
-              required:
-                - action
-      responses:
-        '200':
-          description: Ultra-secure operation completed successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  message:
-                    type: string
-                  timestamp:
-                    type: string
-                    format: date-time
-        '401':
-          description: Authentication required - all three methods needed
-        '403':
-          description: Access forbidden - insufficient authentication
-
+        '201':
+          $ref: '#/components/responses/BulkCreateResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '422':
+          $ref: '#/components/responses/ValidationErrorResponse'
 components:
-  securitySchemes:
-    # Global API Key
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: X-API-Key
-      description: Global API key for basic access
-
-    # Basic Authentication
-    BasicAuth:
-      type: http
-      scheme: basic
-      description: HTTP Basic Authentication (RFC 7617)
-
-    # Bearer Token Authentication (JWT)
-    BearerJWTAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: Bearer token authentication with JWT format (RFC 6750)
-
-    # Bearer Token Authentication (Plain)
-    BearerPlainAuth:
-      type: http
-      scheme: bearer
-      description: Bearer token authentication with plain token format (RFC 6750)
-
-    # Concealed Authentication
-    ConcealedAuth:
-      type: http
-      scheme: concealed
-      description: Concealed authentication (RFC 9729)
-
-    # Digest Authentication
-    DigestAuth:
-      type: http
-      scheme: digest
-      description: HTTP Digest Authentication (RFC 7616)
-
-    # DPoP Authentication
-    DPoPAuth:
-      type: http
-      scheme: DPoP
-      description: Demonstrating Proof of Possession (RFC 9449)
-
-    # GNAP Authentication
-    GNAPAuth:
-      type: http
-      scheme: GNAP
-      description: Grant Negotiation and Authorization Protocol (RFC 9635)
-
-    # HOBA Authentication
-    HOBAChallenge:
-      type: http
-      scheme: HOBA
-      description: HTTP Origin-Bound Authentication - Challenge (RFC 7486)
-    HOBAVerify:
-      type: http
-      scheme: HOBA
-      description: HTTP Origin-Bound Authentication - Verification (RFC 7486)
-
-    # Mutual TLS Authentication
-    MutualTLS:
-      type: mutualTLS
-      description: Mutual TLS with client certificates (RFC 8120)
-
-    # Negotiate Authentication
-    NegotiateAuth:
-      type: http
-      scheme: Negotiate
-      description: HTTP Negotiate Authentication (RFC 4559)
-
-    # OAuth 2.0 Authentication (Authorization Code Flow)
-    OAuth2Auth:
-      type: oauth2
-      flows:
-        authorizationCode:
-          authorizationUrl: https://auth.example.com/oauth2/authorize
-          tokenUrl: https://auth.example.com/oauth2/token
-          scopes:
-            read:users: Read user information
-            write:users: Write user information
-            admin:users: Admin user operations
-        clientCredentials:
-          tokenUrl: https://auth.example.com/oauth2/token
-          scopes:
-            read:system: Read system information
-            write:system: Write system information
-        password:
-          tokenUrl: https://auth.example.com/oauth2/token
-          scopes:
-            read:users: Read user information
-            write:users: Write user information
-        implicit:
-          authorizationUrl: https://auth.example.com/oauth2/authorize
-          scopes:
-            read:users: Read user information
-            write:users: Write user information
-      description: OAuth 2.0 authentication with multiple flows (RFC 6749)
-
-    # OAuth 1.0 Authentication
-    OAuth1Auth:
-      type: http
-      scheme: OAuth
-      description: OAuth 1.0 authentication (RFC 5849)
-
-    # PrivateToken Authentication
-    PrivateTokenAuth:
-      type: http
-      scheme: PrivateToken
-      description: Private Access Token Authentication (RFC 9577)
-
-    # SCRAM-SHA-1 Authentication
-    SCRAMSHA1Auth:
-      type: http
-      scheme: SCRAM-SHA-1
-      description: SCRAM-SHA-1 authentication (RFC 7804)
-
-    # SCRAM-SHA-256 Authentication
-    SCRAMSHA256Auth:
-      type: http
-      scheme: SCRAM-SHA-256
-      description: SCRAM-SHA-256 authentication (RFC 7804)
-
-    # VAPID Authentication
-    VAPIDAuth:
-      type: http
-      scheme: vapid
-      description: Voluntary Application Server Identification (RFC 8292)
-
   schemas:
     User:
       type: object
       properties:
         id:
+          type: integer
+          description: User ID
+        name:
           type: string
-          format: uuid
-        username:
-          type: string
+          description: User name
         email:
           type: string
           format: email
+          description: User email
         created_at:
           type: string
           format: date-time
+          description: User creation timestamp
+        updated_at:
+          type: string
+          format: date-time
+          description: User last update timestamp
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+            - pending
+          description: User status
       required:
         - id
-        - username
+        - name
         - email
-
-    UserProfile:
+        - created_at
+        - status
+    UserInput:
       type: object
       properties:
-        full_name:
+        name:
           type: string
-        bio:
+          minLength: 1
+          maxLength: 100
+          description: User name
+        email:
           type: string
-        preferences:
-          type: object
-          properties:
-            theme:
-              type: string
-              enum: [light, dark]
-            language:
-              type: string
-              default: en
+          format: email
+          description: User email
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+            - pending
+          default: active
+          description: User status
       required:
-        - full_name
-
-tags:
-  - name: API Key Authentication
-    description: API Key Authentication endpoints
-  - name: Basic Authentication
-    description: HTTP Basic Authentication endpoints
-  - name: Bearer JWT Authentication
-    description: Bearer token authentication with JWT format endpoints
-  - name: Bearer Plain Authentication
-    description: Bearer token authentication with plain token format endpoints
-  - name: Concealed Authentication
-    description: Concealed authentication endpoints
-  - name: Digest Authentication
-    description: HTTP Digest Authentication endpoints
-  - name: DPoP Authentication
-    description: Demonstrating Proof of Possession endpoints
-  - name: GNAP Authentication
-    description: Grant Negotiation and Authorization Protocol endpoints
-  - name: HOBA Authentication
-    description: HTTP Origin-Bound Authentication endpoints
-  - name: Mutual TLS
-    description: Mutual TLS authentication endpoints
-  - name: Negotiate Authentication
-    description: HTTP Negotiate Authentication endpoints
-  - name: OAuth 2.0 Authentication
-    description: OAuth 2.0 authentication endpoints
-  - name: OAuth 1.0 Authentication
-    description: OAuth 1.0 authentication endpoints
-  - name: PrivateToken Authentication
-    description: Private Access Token Authentication endpoints
-  - name: SCRAM-SHA-1 Authentication
-    description: SCRAM-SHA-1 authentication endpoints
-  - name: SCRAM-SHA-256 Authentication
-    description: SCRAM-SHA-256 authentication endpoints
-  - name: VAPID Authentication
-    description: Voluntary Application Server Identification endpoints
-  - name: Multiple Security Schemes
-    description: Endpoints demonstrating multiple security scheme combinations 
+        - name
+        - email
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Product ID
+        name:
+          type: string
+          description: Product name
+        description:
+          type: string
+          description: Product description
+        price:
+          type: number
+          format: float
+          minimum: 0
+          description: Product price
+        category:
+          type: string
+          description: Product category
+        in_stock:
+          type: boolean
+          description: Whether product is in stock
+        created_at:
+          type: string
+          format: date-time
+          description: Product creation timestamp
+      required:
+        - id
+        - name
+        - price
+        - category
+        - in_stock
+        - created_at
+    File:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: File ID
+        name:
+          type: string
+          description: File name
+        size:
+          type: integer
+          minimum: 0
+          description: File size in bytes
+        mime_type:
+          type: string
+          description: File MIME type
+        url:
+          type: string
+          format: uri
+          description: File download URL
+        created_at:
+          type: string
+          format: date-time
+          description: File creation timestamp
+      required:
+        - id
+        - name
+        - size
+        - mime_type
+        - url
+        - created_at
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+        code:
+          type: string
+          description: Error code
+        details:
+          type: object
+          additionalProperties: true
+          description: Additional error details
+        timestamp:
+          type: string
+          format: date-time
+          description: Error timestamp
+      required:
+        - error
+        - code
+        - timestamp
+    ValidationError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+        code:
+          type: string
+          description: Error code
+        validation_errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                description: Field name
+              message:
+                type: string
+                description: Validation message
+              value:
+                description: Invalid value
+            required:
+              - field
+              - message
+        timestamp:
+          type: string
+          format: date-time
+          description: Error timestamp
+      required:
+        - error
+        - code
+        - validation_errors
+        - timestamp
+  responses:
+    ProductResponse:
+      description: Product retrieved successfully
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Product'
+          examples:
+            success:
+              summary: Successful product response
+              value:
+                id: PR123456
+                name: Sample Product
+                description: A sample product for testing
+                price: 29.99
+                category: Electronics
+                in_stock: true
+                created_at: '2024-01-15T10:30:00Z'
+    MultiFormatFileResponse:
+      description: File retrieved successfully in multiple formats
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/File'
+          examples:
+            json_file:
+              summary: JSON file response
+              value:
+                id: 550e8400-e29b-41d4-a716-446655440000
+                name: data.json
+                size: 1024
+                mime_type: application/json
+                url: 'https://api.example.com/files/550e8400-e29b-41d4-a716-446655440000/download'
+                created_at: '2024-01-15T10:30:00Z'
+        text/plain:
+          schema:
+            type: string
+            description: Plain text file content
+          examples:
+            text_file:
+              summary: Plain text file response
+              value: This is the content of a plain text file.
+    NotFoundResponse:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            not_found:
+              summary: Resource not found
+              value:
+                error: Resource not found
+                code: RESOURCE_NOT_FOUND
+                details:
+                  resource_type: user
+                  resource_id: '123'
+                timestamp: '2024-01-15T10:30:00Z'
+    BadRequestResponse:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            bad_request:
+              summary: Bad request
+              value:
+                error: Invalid request parameters
+                code: BAD_REQUEST
+                details:
+                  missing_fields:
+                    - name
+                    - email
+                timestamp: '2024-01-15T10:30:00Z'
+    ValidationErrorResponse:
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationError'
+          examples:
+            validation_error:
+              summary: Validation error
+              value:
+                error: Validation failed
+                code: VALIDATION_ERROR
+                validation_errors:
+                  - field: email
+                    message: Invalid email format
+                    value: invalid-email
+                  - field: name
+                    message: Name is required
+                    value: null
+                timestamp: '2024-01-15T10:30:00Z'
+    InternalServerErrorResponse:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            internal_error:
+              summary: Internal server error
+              value:
+                error: Internal server error
+                code: INTERNAL_ERROR
+                details:
+                  request_id: req-123456
+                timestamp: '2024-01-15T10:30:00Z'
+    BulkCreateResponse:
+      description: Bulk creation successful
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Success message
+              created_count:
+                type: integer
+                description: Number of items created
+              failed_count:
+                type: integer
+                description: Number of items that failed to create
+              created_items:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+                description: Successfully created items
+              failed_items:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    index:
+                      type: integer
+                      description: Index of the failed item
+                    error:
+                      type: string
+                      description: Error message
+                    data:
+                      $ref: '#/components/schemas/UserInput'
+                      description: The data that failed to create
+                description: Items that failed to create
+            required:
+              - message
+              - created_count
+              - failed_count
+              - created_items
+              - failed_items
+          examples:
+            bulk_success:
+              summary: Bulk creation successful
+              value:
+                message: Bulk creation completed
+                created_count: 2
+                failed_count: 1
+                created_items:
+                  - id: 1
+                    name: John Doe
+                    email: john.doe@example.com
+                    created_at: '2024-01-15T10:30:00Z'
+                    status: active
+                  - id: 2
+                    name: Jane Smith
+                    email: jane.smith@example.com
+                    created_at: '2024-01-15T10:30:00Z'
+                    status: active
+                failed_items:
+                  - index: 2
+                    error: Email already exists
+                    data:
+                      name: Duplicate User
+                      email: john.doe@example.com
+                      status: active
