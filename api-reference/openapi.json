@@ -4,7 +4,7 @@ info:
   description: API demonstrating various query parameter object scenarios
   version: 1.0.0
 servers:
-  - url: https://api.example.com/v1
+  - url: https://httpbin.org/anything
     description: Production server
 
 paths:
@@ -200,6 +200,198 @@ paths:
           required: false
           schema:
             $ref: '#/components/schemas/OrderFilterModel'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /style-form-true:
+    get:
+      summary: Query parameter referencing data model with style=form, explode=true
+      description: Scenario 7 - Query parameter referencing data model with style=form, explode=true
+      operationId: getStyleFormTrue
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            $ref: '#/components/schemas/FilterModel'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /style-form-false:
+    get:
+      summary: Query parameter referencing data model with style=form, explode=false
+      description: Scenario 8 - Query parameter referencing data model with style=form, explode=false
+      operationId: getStyleFormFalse
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          style: form
+          explode: false
+          schema:
+            $ref: '#/components/schemas/FilterModel'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /style-spaceDelimited-true:
+    get:
+      summary: Query parameter referencing data model with style=spaceDelimited, explode=true
+      description: Scenario 9 - Query parameter referencing data model with style=spaceDelimited, explode=true
+      operationId: getStyleSpaceDelimitedTrue
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          style: spaceDelimited
+          explode: true
+          schema:
+            $ref: '#/components/schemas/FilterModel'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /style-spaceDelimited-false:
+    get:
+      summary: Query parameter referencing data model with style=spaceDelimited, explode=false
+      description: Scenario 10 - Query parameter referencing data model with style=spaceDelimited, explode=false
+      operationId: getStyleSpaceDelimitedFalse
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          style: spaceDelimited
+          explode: false
+          schema:
+            $ref: '#/components/schemas/FilterModel'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /style-pipeDelimited-true:
+    get:
+      summary: Query parameter referencing data model with style=pipeDelimited, explode=true
+      description: Scenario 11 - Query parameter referencing data model with style=pipeDelimited, explode=true
+      operationId: getStylePipeDelimitedTrue
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          style: pipeDelimited
+          explode: true
+          schema:
+            $ref: '#/components/schemas/FilterModel'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /style-pipeDelimited-false:
+    get:
+      summary: Query parameter referencing data model with style=pipeDelimited, explode=false
+      description: Scenario 12 - Query parameter referencing data model with style=pipeDelimited, explode=false
+      operationId: getStylePipeDelimitedFalse
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          style: pipeDelimited
+          explode: false
+          schema:
+            $ref: '#/components/schemas/FilterModel'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /style-deepObject-true:
+    get:
+      summary: Query parameter referencing data model with style=deepObject, explode=true
+      description: Scenario 13 - Query parameter referencing data model with style=deepObject, explode=true
+      operationId: getStyleDeepObjectTrue
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          style: deepObject
+          explode: true
+          schema:
+            $ref: '#/components/schemas/FilterModel'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /style-deepObject-false:
+    get:
+      summary: Query parameter referencing data model with style=deepObject, explode=false
+      description: Scenario 14 - Query parameter referencing data model with style=deepObject, explode=false
+      operationId: getStyleDeepObjectFalse
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          style: deepObject
+          explode: false
+          schema:
+            $ref: '#/components/schemas/FilterModel'
       responses:
         '200':
           description: Successful operation
