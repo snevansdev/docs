@@ -1,229 +1,28 @@
 openapi: 3.0.3
 info:
-  title: Query Parameter Object API
-  description: API demonstrating various query parameter object scenarios
+  title: Query Parameter Array API
+  description: API demonstrating various query parameter array scenarios
   version: 1.0.0
 servers:
   - url: https://httpbin.org/anything
     description: Production server
 
 paths:
-  /scenario1:
-    get:
-      summary: Query parameter containing an object
-      description: Scenario 1 - Query parameter that contains an object
-      operationId: getScenario1
-      parameters:
-        - name: filter
-          in: query
-          required: false
-          schema:
-            type: object
-            properties:
-              name:
-                type: string
-                description: Filter by name
-              age:
-                type: integer
-                description: Filter by age
-              active:
-                type: boolean
-                description: Filter by active status
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-
-  /scenario2:
-    get:
-      summary: Query parameter containing object and regular parameters with name collision
-      description: Scenario 2 - Query parameter that contains object and regular parameters with name collision
-      operationId: getScenario2
-      parameters:
-        - name: filter
-          in: query
-          required: false
-          schema:
-            type: object
-            properties:
-              name:
-                type: string
-                description: Name filter in object
-              category:
-                type: string
-                description: Category filter in object
-        - name: name
-          in: query
-          required: false
-          schema:
-            type: string
-            description: Regular name parameter (collides with filter.name)
-        - name: sort
-          in: query
-          required: false
-          schema:
-            type: string
-            description: Sort parameter
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-
-  /scenario3:
-    get:
-      summary: Query parameter referencing a data model
-      description: Scenario 3 - Query parameter that references a data model
-      operationId: getScenario3
-      parameters:
-        - name: filter
-          in: query
-          required: false
-          schema:
-            $ref: '#/components/schemas/FilterModel'
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-
-  /scenario4:
-    get:
-      summary: Query parameter referencing data model with name collision
-      description: Scenario 4 - Query parameter referencing data model with regular parameter name collision
-      operationId: getScenario4
-      parameters:
-        - name: filter
-          in: query
-          required: false
-          schema:
-            $ref: '#/components/schemas/FilterModel'
-        - name: status
-          in: query
-          required: false
-          schema:
-            type: string
-            description: Regular status parameter (collides with filter.status)
-        - name: limit
-          in: query
-          required: false
-          schema:
-            type: integer
-            description: Limit parameter
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-
-  /scenario5:
-    get:
-      summary: Query parameters with multiple objects having field name collisions
-      description: Scenario 5 - Query parameters containing multiple objects with field name collisions
-      operationId: getScenario5
-      parameters:
-        - name: userFilter
-          in: query
-          required: false
-          schema:
-            type: object
-            properties:
-              id:
-                type: string
-                description: User ID
-              name:
-                type: string
-                description: User name
-              status:
-                type: string
-                description: User status
-        - name: productFilter
-          in: query
-          required: false
-          schema:
-            type: object
-            properties:
-              id:
-                type: string
-                description: Product ID (collides with userFilter.id)
-              name:
-                type: string
-                description: Product name (collides with userFilter.name)
-              price:
-                type: number
-                description: Product price
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-
-  /scenario6:
-    get:
-      summary: Query parameters referencing multiple data models with field name collisions
-      description: Scenario 6 - Query parameters referencing multiple data models with field name collisions
-      operationId: getScenario6
-      parameters:
-        - name: userFilter
-          in: query
-          required: false
-          schema:
-            $ref: '#/components/schemas/UserFilterModel'
-        - name: orderFilter
-          in: query
-          required: false
-          schema:
-            $ref: '#/components/schemas/OrderFilterModel'
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-
   /style-form-true:
     get:
-      summary: Query parameter referencing data model with style=form, explode=true
-      description: Scenario 7 - Query parameter referencing data model with style=form, explode=true
+      summary: Array query parameter with style=form, explode=true
+      description: Array query parameter with style=form, explode=true (default)
       operationId: getStyleFormTrue
       parameters:
-        - name: filter
+        - name: tags
           in: query
           required: false
           style: form
           explode: true
           schema:
-            $ref: '#/components/schemas/FilterModel'
+            type: array
+            items:
+              type: string
       responses:
         '200':
           description: Successful operation
@@ -237,17 +36,19 @@ paths:
 
   /style-form-false:
     get:
-      summary: Query parameter referencing data model with style=form, explode=false
-      description: Scenario 8 - Query parameter referencing data model with style=form, explode=false
+      summary: Array query parameter with style=form, explode=false
+      description: Array query parameter with style=form, explode=false
       operationId: getStyleFormFalse
       parameters:
-        - name: filter
+        - name: tags
           in: query
           required: false
           style: form
           explode: false
           schema:
-            $ref: '#/components/schemas/FilterModel'
+            type: array
+            items:
+              type: string
       responses:
         '200':
           description: Successful operation
@@ -261,17 +62,19 @@ paths:
 
   /style-spaceDelimited-true:
     get:
-      summary: Query parameter referencing data model with style=spaceDelimited, explode=true
-      description: Scenario 9 - Query parameter referencing data model with style=spaceDelimited, explode=true
+      summary: Array query parameter with style=spaceDelimited, explode=true
+      description: Array query parameter with style=spaceDelimited, explode=true
       operationId: getStyleSpaceDelimitedTrue
       parameters:
-        - name: filter
+        - name: tags
           in: query
           required: false
           style: spaceDelimited
           explode: true
           schema:
-            $ref: '#/components/schemas/FilterModel'
+            type: array
+            items:
+              type: string
       responses:
         '200':
           description: Successful operation
@@ -282,20 +85,22 @@ paths:
                 properties:
                   message:
                     type: string
-
+                    
   /style-spaceDelimited-false:
     get:
-      summary: Query parameter referencing data model with style=spaceDelimited, explode=false
-      description: Scenario 10 - Query parameter referencing data model with style=spaceDelimited, explode=false
+      summary: Array query parameter with style=spaceDelimited, explode=false
+      description: Array query parameter with style=spaceDelimited, explode=false
       operationId: getStyleSpaceDelimitedFalse
       parameters:
-        - name: filter
+        - name: tags
           in: query
           required: false
           style: spaceDelimited
           explode: false
           schema:
-            $ref: '#/components/schemas/FilterModel'
+            type: array
+            items:
+              type: string
       responses:
         '200':
           description: Successful operation
@@ -309,17 +114,19 @@ paths:
 
   /style-pipeDelimited-true:
     get:
-      summary: Query parameter referencing data model with style=pipeDelimited, explode=true
-      description: Scenario 11 - Query parameter referencing data model with style=pipeDelimited, explode=true
+      summary: Array query parameter with style=pipeDelimited, explode=true
+      description: Array query parameter with style=pipeDelimited, explode=true
       operationId: getStylePipeDelimitedTrue
       parameters:
-        - name: filter
+        - name: tags
           in: query
           required: false
           style: pipeDelimited
           explode: true
           schema:
-            $ref: '#/components/schemas/FilterModel'
+            type: array
+            items:
+              type: string
       responses:
         '200':
           description: Successful operation
@@ -333,17 +140,19 @@ paths:
 
   /style-pipeDelimited-false:
     get:
-      summary: Query parameter referencing data model with style=pipeDelimited, explode=false
-      description: Scenario 12 - Query parameter referencing data model with style=pipeDelimited, explode=false
+      summary: Array query parameter with style=pipeDelimited, explode=false
+      description: Array query parameter with style=pipeDelimited, explode=false
       operationId: getStylePipeDelimitedFalse
       parameters:
-        - name: filter
+        - name: tags
           in: query
           required: false
           style: pipeDelimited
           explode: false
           schema:
-            $ref: '#/components/schemas/FilterModel'
+            type: array
+            items:
+              type: string
       responses:
         '200':
           description: Successful operation
@@ -355,11 +164,11 @@ paths:
                   message:
                     type: string
 
-  /style-deepObject-true:
+  /style-deepObject-array-true:
     get:
-      summary: Query parameter referencing data model with style=deepObject, explode=true
-      description: Scenario 13 - Query parameter referencing data model with style=deepObject, explode=true
-      operationId: getStyleDeepObjectTrue
+      summary: Array query parameter with style=deepObject, explode=true
+      description: Array query parameter with style=deepObject, explode=true (for arrays)
+      operationId: getStyleDeepObjectArrayTrue
       parameters:
         - name: filter
           in: query
@@ -367,7 +176,14 @@ paths:
           style: deepObject
           explode: true
           schema:
-            $ref: '#/components/schemas/FilterModel'
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                name:
+                  type: string
       responses:
         '200':
           description: Successful operation
@@ -379,11 +195,11 @@ paths:
                   message:
                     type: string
 
-  /style-deepObject-false:
+  /style-deepObject-array-false:
     get:
-      summary: Query parameter referencing data model with style=deepObject, explode=false
-      description: Scenario 14 - Query parameter referencing data model with style=deepObject, explode=false
-      operationId: getStyleDeepObjectFalse
+      summary: Array query parameter with style=deepObject, explode=false
+      description: Array query parameter with style=deepObject, explode=false (for arrays)
+      operationId: getStyleDeepObjectArrayFalse
       parameters:
         - name: filter
           in: query
@@ -391,7 +207,110 @@ paths:
           style: deepObject
           explode: false
           schema:
-            $ref: '#/components/schemas/FilterModel'
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                name:
+                  type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /style-deepObject-arrayRef-true:
+    get:
+      summary: Array query parameter with style=deepObject, explode=true using reference
+      description: Array query parameter with style=deepObject, explode=true using reference to array model
+      operationId: getStyleDeepObjectArrayRefTrue
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          style: deepObject
+          explode: true
+          schema:
+            $ref: '#/components/schemas/ComplexArray'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    
+  /style-deepObject-arrayRef-false:
+    get:
+      summary: Array query parameter with style=deepObject, explode=false using reference
+      description: Array query parameter with style=deepObject, explode=false using reference to array model
+      operationId: getStyleDeepObjectArrayRefFalse
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          style: deepObject
+          explode: false
+          schema:
+            $ref: '#/components/schemas/ComplexArray'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    
+  /style-deepObject-stringArray-true:
+    get:
+      summary: String array query parameter with style=deepObject, explode=true
+      description: String array query parameter with style=deepObject, explode=true using reference to string array model
+      operationId: getStyleDeepObjectStringArrayTrue
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          style: deepObject
+          explode: true
+          schema:
+            $ref: '#/components/schemas/PureStringArray'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    
+  /style-deepObject-stringArray-false:
+    get:
+      summary: String array query parameter with style=deepObject, explode=false
+      description: String array query parameter with style=deepObject, explode=false using reference to string array model
+      operationId: getStyleDeepObjectStringArrayFalse
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          style: deepObject
+          explode: false
+          schema:
+            $ref: '#/components/schemas/PureStringArray'
       responses:
         '200':
           description: Successful operation
@@ -405,44 +324,43 @@ paths:
 
 components:
   schemas:
-    FilterModel:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name filter
-        status:
-          type: string
-          description: Status filter
-        date:
-          type: string
-          format: date
-          description: Date filter
+    TagsArray:
+      type: array
+      items:
+        type: string
+      description: Array of tags
 
-    UserFilterModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: User ID
-        email:
-          type: string
-          description: User email
-        createdAt:
-          type: string
-          format: date-time
-          description: User creation date
+    CategoryArray:
+      type: array
+      items:
+        type: string
+      description: Array of categories
 
-    OrderFilterModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Order ID (collides with UserFilterModel.id)
-        status:
-          type: string
-          description: Order status
-        createdAt:
-          type: string
-          format: date-time
-          description: Order creation date (collides with UserFilterModel.createdAt)
+    ProductTagsArray:
+      type: array
+      items:
+        type: string
+      description: Array of product tags (same type as TagsArray)
+      
+    ComplexArray:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+            description: Item ID
+          name:
+            type: string
+            description: Item name
+          attributes:
+            type: array
+            items:
+              type: string
+            description: Item attributes
+            
+    PureStringArray:
+      type: array
+      items:
+        type: string
+      description: Pure array of strings for deepObject style testing
