@@ -1,366 +1,90 @@
 openapi: 3.0.3
 info:
-  title: Query Parameter Array API
-  description: API demonstrating various query parameter array scenarios
+  title: Sample API with Server Variables
+  description: A simple API demonstrating the use of server variables in OpenAPI 3.0
   version: 1.0.0
+  contact:
+    name: API Support
+    email: support@example.com
+
 servers:
-  - url: https://httpbin.org/anything
-    description: Production server
+  - url: https://{vendor}.org:{port}/anything
+    description: API server with configurable environment and port
+    variables:
+      vendor:
+        default: httpbin
+        description: The vendor to connect to
+        enum:
+          - httpbin
+          - httpbingo
+      port:
+        default: '443'
+        description: The port number for the API server
 
 paths:
-  /style-form-true:
+  /users:
     get:
-      summary: Array query parameter with style=form, explode=true
-      description: Array query parameter with style=form, explode=true (default)
-      operationId: getStyleFormTrue
+      summary: Get list of users
+      description: Returns a list of users from the system
+      operationId: getUsers
+      tags:
+        - Users
       parameters:
-        - name: tags
+        - name: limit
           in: query
+          description: Maximum number of users to return
           required: false
-          style: form
-          explode: true
           schema:
-            type: array
-            items:
-              type: string
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 100
       responses:
         '200':
-          description: Successful operation
+          description: Successful response with user list
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  message:
-                    type: string
-
-  /style-form-false:
-    get:
-      summary: Array query parameter with style=form, explode=false
-      description: Array query parameter with style=form, explode=false
-      operationId: getStyleFormFalse
-      parameters:
-        - name: tags
-          in: query
-          required: false
-          style: form
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: Successful operation
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        name:
+                          type: string
+                          example: John Doe
+                        email:
+                          type: string
+                          example: john.doe@example.com
+                  total:
+                    type: integer
+                    example: 1
+        '400':
+          description: Bad request
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  message:
+                  error:
                     type: string
-
-  /style-spaceDelimited-true:
-    get:
-      summary: Array query parameter with style=spaceDelimited, explode=true
-      description: Array query parameter with style=spaceDelimited, explode=true
-      operationId: getStyleSpaceDelimitedTrue
-      parameters:
-        - name: tags
-          in: query
-          required: false
-          style: spaceDelimited
-          explode: true
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: Successful operation
+                    example: Invalid parameters
+        '500':
+          description: Internal server error
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  message:
+                  error:
                     type: string
-                    
-  /style-spaceDelimited-false:
-    get:
-      summary: Array query parameter with style=spaceDelimited, explode=false
-      description: Array query parameter with style=spaceDelimited, explode=false
-      operationId: getStyleSpaceDelimitedFalse
-      parameters:
-        - name: tags
-          in: query
-          required: false
-          style: spaceDelimited
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-
-  /style-pipeDelimited-true:
-    get:
-      summary: Array query parameter with style=pipeDelimited, explode=true
-      description: Array query parameter with style=pipeDelimited, explode=true
-      operationId: getStylePipeDelimitedTrue
-      parameters:
-        - name: tags
-          in: query
-          required: false
-          style: pipeDelimited
-          explode: true
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-
-  /style-pipeDelimited-false:
-    get:
-      summary: Array query parameter with style=pipeDelimited, explode=false
-      description: Array query parameter with style=pipeDelimited, explode=false
-      operationId: getStylePipeDelimitedFalse
-      parameters:
-        - name: tags
-          in: query
-          required: false
-          style: pipeDelimited
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-
-  /style-deepObject-array-true:
-    get:
-      summary: Array query parameter with style=deepObject, explode=true
-      description: Array query parameter with style=deepObject, explode=true (for arrays)
-      operationId: getStyleDeepObjectArrayTrue
-      parameters:
-        - name: filter
-          in: query
-          required: false
-          style: deepObject
-          explode: true
-          schema:
-            type: array
-            items:
-              type: object
-              properties:
-                id:
-                  type: string
-                name:
-                  type: string
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-
-  /style-deepObject-array-false:
-    get:
-      summary: Array query parameter with style=deepObject, explode=false
-      description: Array query parameter with style=deepObject, explode=false (for arrays)
-      operationId: getStyleDeepObjectArrayFalse
-      parameters:
-        - name: filter
-          in: query
-          required: false
-          style: deepObject
-          explode: false
-          schema:
-            type: array
-            items:
-              type: object
-              properties:
-                id:
-                  type: string
-                name:
-                  type: string
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-
-  /style-deepObject-arrayRef-true:
-    get:
-      summary: Array query parameter with style=deepObject, explode=true using reference
-      description: Array query parameter with style=deepObject, explode=true using reference to array model
-      operationId: getStyleDeepObjectArrayRefTrue
-      parameters:
-        - name: filter
-          in: query
-          required: false
-          style: deepObject
-          explode: true
-          schema:
-            $ref: '#/components/schemas/ComplexArray'
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    
-  /style-deepObject-arrayRef-false:
-    get:
-      summary: Array query parameter with style=deepObject, explode=false using reference
-      description: Array query parameter with style=deepObject, explode=false using reference to array model
-      operationId: getStyleDeepObjectArrayRefFalse
-      parameters:
-        - name: filter
-          in: query
-          required: false
-          style: deepObject
-          explode: false
-          schema:
-            $ref: '#/components/schemas/ComplexArray'
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    
-  /style-deepObject-stringArray-true:
-    get:
-      summary: String array query parameter with style=deepObject, explode=true
-      description: String array query parameter with style=deepObject, explode=true using reference to string array model
-      operationId: getStyleDeepObjectStringArrayTrue
-      parameters:
-        - name: filter
-          in: query
-          required: false
-          style: deepObject
-          explode: true
-          schema:
-            $ref: '#/components/schemas/PureStringArray'
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    
-  /style-deepObject-stringArray-false:
-    get:
-      summary: String array query parameter with style=deepObject, explode=false
-      description: String array query parameter with style=deepObject, explode=false using reference to string array model
-      operationId: getStyleDeepObjectStringArrayFalse
-      parameters:
-        - name: filter
-          in: query
-          required: false
-          style: deepObject
-          explode: false
-          schema:
-            $ref: '#/components/schemas/PureStringArray'
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                    example: Server error occurred
 
 components:
-  schemas:
-    TagsArray:
-      type: array
-      items:
-        type: string
-      description: Array of tags
+  schemas: {}
 
-    CategoryArray:
-      type: array
-      items:
-        type: string
-      description: Array of categories
-
-    ProductTagsArray:
-      type: array
-      items:
-        type: string
-      description: Array of product tags (same type as TagsArray)
-      
-    ComplexArray:
-      type: array
-      items:
-        type: object
-        properties:
-          id:
-            type: string
-            description: Item ID
-          name:
-            type: string
-            description: Item name
-          attributes:
-            type: array
-            items:
-              type: string
-            description: Item attributes
-            
-    PureStringArray:
-      type: array
-      items:
-        type: string
-      description: Pure array of strings for deepObject style testing
