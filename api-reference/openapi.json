@@ -20,7 +20,18 @@ servers:
       port:
         default: '443'
         description: The port number for the API server
-
+  - url: https://{vendor}:{port}/anything
+    description: API server with configurable environment and port
+    variables:
+      vendor:
+        default: httpbin.org
+        description: The vendor to connect to
+        enum:
+          - httpbin.org
+          - httpbingo.org
+      port:
+        default: '443'
+        description: The port number for the API server
 paths:
   /users:
     get:
