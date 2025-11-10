@@ -97,7 +97,6 @@ components:
               - category
               - price
           description: JSON metadata stored as a string
-          example: '{"category": "electronics", "price": 299.99, "inStock": true}'
         createdAt:
           type: string
           format: date-time
