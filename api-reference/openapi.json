@@ -1,291 +1,34 @@
-openapi: 3.2.0
+openapi: 3.1.0
 info:
-  title: Sequential Media Types API
-  description: Demonstration API for OpenAPI 3.2 Server-Sent Events and NDJSON streaming responses
+  title: Content Media Type Example API
   version: 1.0.0
-  contact:
-    name: API Support
-    email: support@example.com
-  license:
-    name: MIT
-    url: https://opensource.org/licenses/MIT
+  description: An API demonstrating the use of contentMediaType for JSON strings
 
 servers:
   - url: https://api.example.com/v1
     description: Production server
-  - url: https://staging-api.example.com/v1
-    description: Staging server
-
-tags:
-  - name: streaming
-    description: Streaming data endpoints
 
 paths:
-  /events/stream:
-    get:
-      summary: Server-Sent Events stream
-      description: |
-        Push real-time event updates using Server-Sent Events (SSE).
-        The client will continuously receive an event stream until the connection is closed.
-      operationId: getEventStream
-      tags:
-        - streaming
-      parameters:
-        - name: topic
-          in: query
-          description: Event topic to subscribe to
-          required: false
-          schema:
-            type: string
-            enum:
-              - notifications
-              - updates
-              - alerts
-            default: notifications
-        - name: since
-          in: query
-          description: Receive events starting from the specified timestamp
-          required: false
-          schema:
-            type: string
-            format: date-time
+  /items:
+    post:
+      summary: Create a new item
+      description: Creates a new item with embedded JSON metadata
+      operationId: createItem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemRequest'
       responses:
-        '200':
-          description: Successfully established SSE connection, streaming events
+        '201':
+          description: Item created successfully
           content:
-            text/event-stream:
-              itemSchema:
-                type: object
-                required:
-                  - id
-                  - event
-                  - data
-                  - timestamp
-                properties:
-                  id:
-                    type: string
-                    description: Unique event identifier
-                    example: "evt_1234567890"
-                  event:
-                    type: string
-                    description: Event type
-                    enum:
-                      - message
-                      - notification
-                      - alert
-                      - heartbeat
-                    example: "notification"
-                  data:
-                    type: object
-                    description: Event data payload
-                    properties:
-                      title:
-                        type: string
-                        example: "New Message"
-                      message:
-                        type: string
-                        example: "You have a new system notification"
-                      priority:
-                        type: string
-                        enum:
-                          - low
-                          - medium
-                          - high
-                        example: "medium"
-                  timestamp:
-                    type: string
-                    format: date-time
-                    description: Event timestamp
-                    example: "2025-11-05T10:30:00Z"
-              examples:
-                notification:
-                  summary: Notification event example
-                  value:
-                    id: "evt_1234567890"
-                    event: "notification"
-                    data:
-                      title: "System Update"
-                      message: "System maintenance scheduled for tonight"
-                      priority: "high"
-                    timestamp: "2025-11-05T10:30:00Z"
-                heartbeat:
-                  summary: Heartbeat event example
-                  value:
-                    id: "evt_1234567891"
-                    event: "heartbeat"
-                    data:
-                      status: "alive"
-                    timestamp: "2025-11-05T10:30:30Z"
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemResponse'
         '400':
-          description: Invalid request parameters
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '401':
-          description: Unauthorized, authentication required
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '503':
-          description: Service unavailable
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-  /logs/stream:
-    get:
-      summary: NDJSON log stream
-      description: |
-        Stream log data in Newline Delimited JSON (NDJSON) format.
-        Each line is a separate JSON object representing a single log entry.
-      operationId: getLogStream
-      tags:
-        - streaming
-      parameters:
-        - name: level
-          in: query
-          description: Filter by log level
-          required: false
-          schema:
-            type: string
-            enum:
-              - debug
-              - info
-              - warning
-              - error
-              - critical
-        - name: service
-          in: query
-          description: Filter logs from a specific service
-          required: false
-          schema:
-            type: string
-            example: "auth-service"
-        - name: limit
-          in: query
-          description: Limit the number of log entries returned
-          required: false
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 10000
-            default: 1000
-        - name: follow
-          in: query
-          description: Continuously follow new logs (similar to tail -f)
-          required: false
-          schema:
-            type: boolean
-            default: false
-      responses:
-        '200':
-          description: Successfully streaming logs in NDJSON format
-          content:
-            application/jsonl:
-              itemSchema:
-                type: object
-                required:
-                  - timestamp
-                  - level
-                  - service
-                  - message
-                properties:
-                  timestamp:
-                    type: string
-                    format: date-time
-                    description: Log timestamp
-                    example: "2025-11-05T10:30:00.123Z"
-                  level:
-                    type: string
-                    description: Log level
-                    enum:
-                      - debug
-                      - info
-                      - warning
-                      - error
-                      - critical
-                    example: "info"
-                  service:
-                    type: string
-                    description: Name of the service that generated the log
-                    example: "api-gateway"
-                  message:
-                    type: string
-                    description: Log message content
-                    example: "Request processed successfully"
-                  metadata:
-                    type: object
-                    description: Additional metadata information
-                    additionalProperties: true
-                    properties:
-                      requestId:
-                        type: string
-                        example: "req_abc123"
-                      userId:
-                        type: string
-                        example: "user_456"
-                      duration:
-                        type: number
-                        description: Request duration in milliseconds
-                        example: 45.23
-                      statusCode:
-                        type: integer
-                        example: 200
-                  trace:
-                    type: object
-                    description: Distributed tracing information
-                    properties:
-                      traceId:
-                        type: string
-                        example: "trace_xyz789"
-                      spanId:
-                        type: string
-                        example: "span_001"
-              examples:
-                infoLog:
-                  summary: Info level log entry
-                  value:
-                    timestamp: "2025-11-05T10:30:00.123Z"
-                    level: "info"
-                    service: "api-gateway"
-                    message: "Request processed successfully"
-                    metadata:
-                      requestId: "req_abc123"
-                      userId: "user_456"
-                      duration: 45.23
-                      statusCode: 200
-                    trace:
-                      traceId: "trace_xyz789"
-                      spanId: "span_001"
-                errorLog:
-                  summary: Error level log entry
-                  value:
-                    timestamp: "2025-11-05T10:30:15.456Z"
-                    level: "error"
-                    service: "payment-service"
-                    message: "Payment processing failed"
-                    metadata:
-                      requestId: "req_def456"
-                      errorCode: "PAYMENT_DECLINED"
-                      amount: 99.99
-                      currency: "USD"
-        '400':
-          description: Invalid request parameters
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '401':
-          description: Unauthorized, authentication required
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '403':
-          description: Forbidden, insufficient permissions
+          description: Bad request
           content:
             application/json:
               schema:
@@ -293,46 +36,83 @@ paths:
 
 components:
   schemas:
-    Error:
+    ItemRequest:
       type: object
       required:
-        - code
-        - message
+        - name
+        - metadata
+      properties:
+        name:
+          type: string
+          description: The name of the item
+          example: "Sample Item"
+        metadata:
+          type: string
+          contentMediaType: application/json
+          contentSchema:
+            type: object
+            properties:
+              category:
+                type: string
+                description: Product category
+              price:
+                type: number
+                description: Product price
+              inStock:
+                type: boolean
+                description: Whether the product is in stock
+            required:
+              - category
+              - price
+          description: JSON metadata stored as a string
+          example: '{"category": "electronics", "price": 299.99, "inStock": true}'
+    
+    ItemResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the created item
+          example: "item-12345"
+        name:
+          type: string
+          description: The name of the item
+          example: "Sample Item"
+        metadata:
+          type: string
+          contentMediaType: application/json
+          contentSchema:
+            type: object
+            properties:
+              category:
+                type: string
+                description: Product category
+              price:
+                type: number
+                description: Product price
+              inStock:
+                type: boolean
+                description: Whether the product is in stock
+            required:
+              - category
+              - price
+          description: JSON metadata stored as a string
+          example: '{"category": "electronics", "price": 299.99, "inStock": true}'
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp when the item was created
+          example: "2025-11-10T12:00:00Z"
+    
+    Error:
+      type: object
       properties:
         code:
           type: string
           description: Error code
-          example: "INVALID_PARAMETER"
+          example: "INVALID_REQUEST"
         message:
           type: string
-          description: Error message description
-          example: "The provided parameter is invalid"
-        details:
-          type: array
-          description: Detailed error information
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-                example: "level"
-              issue:
-                type: string
-                example: "Must be a valid log level"
-
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: JWT Bearer Token authentication
-    apiKey:
-      type: apiKey
-      in: header
-      name: X-API-Key
-      description: API Key authentication
-
-security:
-  - bearerAuth: []
-  - apiKey: []
+          description: Error message
+          example: "The request body is invalid"
 
