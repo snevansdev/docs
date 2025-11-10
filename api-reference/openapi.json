@@ -33,6 +33,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  
+  /documents:
+    post:
+      summary: Create a new document
+      description: Creates a new document with configuration data
+      operationId: createDocument
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentRequest'
+      responses:
+        '201':
+          description: Document created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
 components:
   schemas:
@@ -97,6 +122,7 @@ components:
               - category
               - price
           description: JSON metadata stored as a string
+          example: '{"category": "electronics", "price": 299.99, "inStock": true}'
         createdAt:
           type: string
           format: date-time
@@ -114,4 +140,64 @@ components:
           type: string
           description: Error message
           example: "The request body is invalid"
+    
+    DocumentRequest:
+      type: object
+      required:
+        - title
+        - config
+      properties:
+        title:
+          type: string
+          description: The title of the document
+        config:
+          type: string
+          contentMediaType: application/json
+          contentSchema:
+            type: object
+            properties:
+              theme:
+                type: string
+                description: Document theme
+              fontSize:
+                type: integer
+                description: Font size in points
+              autoSave:
+                type: boolean
+                description: Enable auto-save feature
+            required:
+              - theme
+          description: Document configuration stored as a JSON string
+    
+    DocumentResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the document
+        title:
+          type: string
+          description: The title of the document
+        config:
+          type: string
+          contentMediaType: application/json
+          contentSchema:
+            type: object
+            properties:
+              theme:
+                type: string
+                description: Document theme
+              fontSize:
+                type: integer
+                description: Font size in points
+              autoSave:
+                type: boolean
+                description: Enable auto-save feature
+            required:
+              - theme
+          description: Document configuration stored as a JSON string
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp when the document was created
 
